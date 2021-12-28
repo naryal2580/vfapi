@@ -20,7 +20,7 @@ def run_query(query):
         cursor.execute(query)
         resp = cursor.fetchall()
         return dict(resp)
-    except mysql.connector.errors.OperationalError as e:
+    except mysql.connector.errors.OperationalError:
         init_db()
         return run_query(query)
     except Exception as e:
