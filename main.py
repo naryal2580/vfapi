@@ -33,8 +33,8 @@ def root():
     return {'goto': '/docs'}
 
 @app.get('/user')
-def return_user(user_name: str):
-    return run_query(f'SELECT * FROM users WHERE name = "{user_name}"')
+def return_user(username: str):
+    return run_query(f'SELECT * FROM users WHERE name = "{username}"')
 
 if __name__ == '__main__':
     init_db(); __import__('uvicorn').run('main:app', port=8888, reload=False)
