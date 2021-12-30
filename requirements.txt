@@ -1,4 +1,6 @@
 fastapi
 pydantic
-mysql-connector-python
 uvicorn
+aiosqlite
+mongomock
+faker
