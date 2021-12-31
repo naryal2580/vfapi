@@ -184,8 +184,8 @@ async def delete_user(username: Optional[str] = '', user: Optional[User] = None)
         await run_sql_query(f'DELETE FROM users WHERE username = "{username}";', commit=True)
         return {'resp': 'done'}
     elif user:
-        db_client.vfapi.users.delete_one({'contact': user.contact})
-        await run_sql_query(f'DELETE FROM users WHERE contact = {user.contact};', commit=True)
+        db_client.vfapi.users.delete_one({'address': user.address})
+        await run_sql_query(f'DELETE FROM users WHERE address = {user.address};', commit=True)
     return {'resp': '!done'}
 
 if __name__ == '__main__':
