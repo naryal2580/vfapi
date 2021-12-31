@@ -101,7 +101,6 @@ async def run_sql_query(query):
             return data
         return {'users': _data}
     except Exception as e:
-        # print(repr(e))
         await init_db()
         return run_sql_query(query)
 
