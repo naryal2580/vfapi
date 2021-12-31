@@ -9,7 +9,7 @@ $ export HOST="127.0.0.1"; export PORT=8888
 ```
 NoSQLi
 ```
-$ curl -s "http://$HOST:$PORT/find" -H 'Content-Type: application/json' -d '{"id":{"$in":[1,2,3,4]}}' | jq
+$ curl -s "http://$HOST:$PORT/find" -H 'Content-Type: application/json' -d '{"id":{"$in":[1,2]}}' | jq
 ```
 SQLi
 ```
