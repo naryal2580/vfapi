@@ -2,5 +2,5 @@ fastapi
 pydantic
 uvicorn
 aiosqlite
-mongomock
+montydb
 faker

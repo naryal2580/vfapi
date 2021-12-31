@@ -10,6 +10,6 @@ main() {
 }
 
 main
-while [[ $1 ]]; do
+while [[ $1 == ""--reload ]]; do
 	main;
 done

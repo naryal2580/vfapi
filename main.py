@@ -1,24 +1,36 @@
 #!/usr/bin/env python3
 
 import asyncio
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from faker import Faker
 import aiosqlite, random
 from hashlib import md5
 from os import path, remove
+from shutil import rmtree
+from montydb import set_storage, MontyClient
 
-DB_FILENAME = 'vfapi.db'
-app = FastAPI()
-fake = Faker()
+DB_FILENAME = 'vfapi'
+app, fake = FastAPI(), Faker()
+set_storage(
+        repository=f'{DB_FILENAME}.nosql.db',
+        storage='sqlite',
+        use_bson=False
+        )
+db_client = MontyClient(
+        f"{DB_FILENAME}.nosql.db",
+        synchronous=1,
+        automatic_index=False,
+        busy_timeout=5000
+        )
 
-async def get_db():
-    db = await aiosqlite.connect(database=DB_FILENAME)
+async def get_sql_db():
+    db = await aiosqlite.connect(database=f'{DB_FILENAME}.sql.db')
     return db
 
-async def init_db():
-    if path.isfile(DB_FILENAME):
-        remove(DB_FILENAME)
-    db = await get_db()
+async def init_sql_db():
+    if path.isfile(f'{DB_FILENAME}.sql.db'):
+        remove(f'{DB_FILENAME}.sql.db')
+    db = await get_sql_db()
     await db.execute('''
 CREATE TABLE users ( id INTEGER PRIMARY KEY AUTOINCREMENT,
                      name TEXT NOT NULL,
@@ -52,9 +64,28 @@ INSERT INTO users ( name,
     await db.close()
     return True
 
-async def run_query(query):
+async def init_nosql_db():
+    if path.isdir(f'{DB_FILENAME}.nosql.db'):
+        rmtree(f'{DB_FILENAME}.nosql.db')
+    users = db_client.vfapi.users
+    data = await run_sql_query('SELECT * FROM USERS;')
+    for user in data['users']:
+        users.insert_one({
+            'id': user[0],
+            'name': user[1],
+            'username': user[2],
+            'address': user[4],
+            'email': user[5],
+            'phone': user[6]
+            })
+
+async def init_db():
+    await init_sql_db()
+    await init_nosql_db()
+
+async def run_sql_query(query):
     try:
-        db = await get_db()
+        db = await get_sql_db()
         cursor = await db.execute(query)
         _data, data = await cursor.fetchall(), {}
         await cursor.close()
@@ -72,16 +103,27 @@ async def run_query(query):
     except Exception as e:
         # print(repr(e))
         await init_db()
-        return run_query(query)
+        return run_sql_query(query)
+
+def get_nosql_users(query):
+    users = db_client.vfapi.users
+    user_data = tuple(users.find(query))
+    for data in user_data: data.pop('_id')
+    return {'users': tuple(user_data)}
 
 @app.get('/')
 def root():
     return {'goto': '/docs'}
 
-@app.get('/get')
-async def return_user(username: str):
-    resp = await run_query(f'SELECT * FROM users WHERE username = "{username}"')
+@app.get('/select')
+async def sql_return_users(username: str):
+    resp = await run_sql_query(f'SELECT * FROM users WHERE username = "{username}"')
     return resp
+
+@app.post('/find')
+async def nosql_return_users(request: Request):
+    query = await request.json()
+    return get_nosql_users(query)
 
 if __name__ == '__main__':
     asyncio.run(init_db()); __import__('uvicorn').run('main:app', port=8888, reload=False)
