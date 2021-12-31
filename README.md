@@ -4,6 +4,9 @@ Vulnerable FastAPI
 > Vulnerable FastAPI is a simple vulnerable FastAPI application for learning API pentesting on vulnerable API endpoints. Please refer to `/docs` for information regarding endpoints.
 
 ### Exploitation examples
+```
+$ export HOST="127.0.0.1"; export PORT=8888
+```
 NoSQLi
 ```
 $ curl -s "http://$HOST:$PORT/find" -H 'Content-Type: application/json' -d '{"id":{"$in":[1,2,3,4]}}' | jq
