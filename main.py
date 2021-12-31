@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from typing import Optional, Any
 import asyncio
 from fastapi import FastAPI, Request
 from faker import Faker
@@ -156,7 +157,6 @@ INSERT INTO users (
 '''[1:-1]
     await run_sql_query(query, commit=True)
     _id = await run_sql_query('SELECT id from users ORDER BY ROWID DESC limit 1;')
-    print(_id)
     db_client.vfapi.users.insert_one({
         'id': _id,
         'name': user.name,
@@ -176,6 +176,17 @@ async def nosql_return_users_from_username(username: str):
 async def nosql_return_users(request: Request):
     query = await request.json()
     return get_nosql_users(query)
+
+@app.delete('/user')
+async def delete_user(username: Optional[str] = '', user: Optional[User] = None):
+    if username:
+        db_client.vfapi.users.delete_one({'username': username})
+        await run_sql_query(f'DELETE FROM users WHERE username = "{username}";', commit=True)
+        return {'resp': 'done'}
+    elif user:
+        db_client.vfapi.users.delete_one({'id': user.id})
+        await run_sql_query(f'DELETE FROM users WHERE id = {user.id};', commit=True)
+    return {'resp': '!done'}
 
 if __name__ == '__main__':
     asyncio.run(init_db()); __import__('uvicorn').run('main:app', port=8888, reload=False)
