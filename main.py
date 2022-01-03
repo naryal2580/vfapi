@@ -260,12 +260,12 @@ def security_txt():
 
 @app.get('/docs', include_in_schema=False)
 def return_docs():
-    return HTMLResponse('<!DOCTYPE html><html><head><link type="text/css" rel="stylesheet" href="static/swagger-ui.css"><link rel="shortcut icon" href="static/img/favicon.png"><title>' + app.title + ' - Swagger UI</title></head><body><div id="vfastapi-ui"></div><script src="static/swagger-ui-bundle.js"></script><script>const ui = SwaggerUIBundle({ url: "/openapi.json", oauth2RedirectUrl: window.location.origin + "/docs/oauth2-redirect", dom_id: "#vfastapi-ui", presets: [ SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset ], layout: "BaseLayout", deepLinking: true, showExtensions: true, showCommonExtensions: true });</script></body></html>', status_code=200)
+    return HTMLResponse('<!DOCTYPE html><html><head><link type="text/css" rel="stylesheet" href="static/css/swagger-ui.css"><link rel="shortcut icon" href="static/img/favicon.png"><title>' + app.title + ' - Swagger UI</title></head><body><div id="vfastapi-ui"></div><script src="static/js/swagger-ui-bundle.js"></script><script>const ui = SwaggerUIBundle({ url: "/openapi.json", oauth2RedirectUrl: window.location.origin + "/docs/oauth2-redirect", dom_id: "#vfastapi-ui", presets: [ SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset ], layout: "BaseLayout", deepLinking: true, showExtensions: true, showCommonExtensions: true });</script></body></html>', status_code=200)
 
 @app.get('/redoc', include_in_schema=False)
 def return_redoc():
     # TODO: Serve font locally.
-    return HTMLResponse('<!DOCTYPE html><html><head><title>' + app.title + ' - ReDoc</title><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet"><link rel="shortcut icon" href="static/img/favicon.png"><style>body { margin: 0; padding: 0; }</style></head><body><redoc spec-url="/openapi.json"></redoc><script src="static/redoc.standalone.js"> </script></body></html>', status_code=200)
+    return HTMLResponse('<!DOCTYPE html><html><head><title>' + app.title + ' - ReDoc</title><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet"><link rel="shortcut icon" href="static/img/favicon.png"><link rel="stylesheet" href="static/css/redoc-ui.css" type="text/css"></head><body><redoc spec-url="/openapi.json"></redoc><script src="static/js/redoc.standalone.js"> </script></body></html>', status_code=200)
 
 app.openapi = openapi
 

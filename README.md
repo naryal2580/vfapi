@@ -1,4 +1,4 @@
-![Vulnerable FastAPI Logo](./img/logo.png "Vulnerable FastAPI Logo")
+![Vulnerable FastAPI Logo](./static/img/logo.png "Vulnerable FastAPI Logo")
 <p align="center">
     <em>Vulnerable FastAPI, compliant to <a href="https://owasp.org/www-project-top-ten/">OWASP TOP 10: 2021</a></em><br><b> ⚠️ Under Development ⚠️</b>
 </p>
