@@ -31,7 +31,7 @@ class User(BaseModel):
 
 author_info = {
     'name': 'Captain Nick Lucifer*',
-    'url': 'https://is.gd/c_nick',
+    'url': 'https://git.io/vulnfapi',
     'email': 'naryal2580@gmail.com'
         }
 __license__ = {
