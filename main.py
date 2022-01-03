@@ -270,4 +270,5 @@ def return_redoc():
 app.openapi = openapi
 
 if __name__ == '__main__':
+    # TODO: Custom port number.
     asyncio.run(init_db()); __import__('uvicorn').run('main:app', port=8888, reload=False)
